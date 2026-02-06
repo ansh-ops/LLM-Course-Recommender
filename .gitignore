@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Large ML artifacts
+*.faiss
+*.pkl
+
+# Data (keep only small CSVs if needed)
+data/archive-7/
+
+# OS
+.DS_Store
