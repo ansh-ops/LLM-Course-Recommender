@@ -17,3 +17,12 @@ An LLM-powered course recommendation system that matches user resumes to relevan
 - (Optional) OpenAI / Gemini for explanations
 
 ## 📁 Project Structure
+data/                  # CSV datasets
+resume/                # Resume processing scripts
+scraper.py             # Course scraping
+final.py               # End-to-end pipeline
+
+## 🚀 How To Run
+pip install -r requirements.txt
+python final.py
+
