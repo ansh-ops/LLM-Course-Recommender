@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Course Matcher</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Resume Intelligence</p>
+          <h1>Find courses that actually fit the story your resume tells.</h1>
+          <p class="lede">
+            Upload a resume and get matching profiles, extracted skills, and
+            diverse course recommendations in one clean view.
+          </p>
+        </div>
+
+        <section class="upload-panel">
+          <form id="upload-form" class="upload-form">
+            <label class="dropzone" for="resume-input">
+              <input
+                id="resume-input"
+                name="resume"
+                type="file"
+                accept=".pdf,.txt,application/pdf,text/plain"
+              />
+              <span class="dropzone-title">Drop a PDF or TXT resume</span>
+              <span class="dropzone-subtitle"
+                >Or click to browse your files</span
+              >
+              <span id="file-name" class="file-name">No file selected yet</span>
+            </label>
+
+            <button id="submit-button" type="submit" class="primary-button">
+              Analyze Resume
+            </button>
+          </form>
+
+          <div class="status-bar">
+            <span class="status-label">System status</span>
+            <span id="status-pill" class="status-pill">Ready</span>
+          </div>
+        </section>
+      </header>
+
+      <main class="content-grid">
+        <section class="panel summary-panel">
+          <div class="panel-heading">
+            <p class="panel-kicker">Detected Skills</p>
+            <h2>What the model sees first</h2>
+          </div>
+          <div id="skills" class="chip-row empty-state">
+            Upload a resume to see extracted skills.
+          </div>
+        </section>
+
+        <section class="panel profiles-panel">
+          <div class="panel-heading">
+            <p class="panel-kicker">Similar Profiles</p>
+            <h2>Closest candidate matches</h2>
+          </div>
+          <div id="profiles" class="card-stack empty-state">
+            Similar profiles will appear here.
+          </div>
+        </section>
+
+        <section class="panel courses-panel">
+          <div class="panel-heading">
+            <p class="panel-kicker">Recommended Courses</p>
+            <h2>Diverse next steps for this resume</h2>
+          </div>
+          <div id="courses" class="course-grid empty-state">
+            Course recommendations will appear here.
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

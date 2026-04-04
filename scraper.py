@@ -12,8 +12,13 @@ print("✅ Found", len(data["schools"]), "schools")
 
 # Step 2: Loop through each school and fetch courses
 for school in data["schools"]:
-    code = "CSCI"     # e.g. "CSCI"
+    code = school.get("code")
     name = school["name"]     # e.g. "Computer Science"
+
+    if not code:
+        print(f"⚠️ Skipping school without a code: {name}")
+        continue
+
     course_url = f"https://classes.usc.edu/term-20253/soc/{code}.json"
 
     try:

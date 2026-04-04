@@ -7,8 +7,12 @@ from sentence_transformers import SentenceTransformer
 with open("resume_metadata.json", "r") as f:
     resumes = json.load(f)
 
-# Ensure 'text' is present in every record
-texts = [res["text"] for res in resumes if "text" in res]
+# Keep metadata aligned with the vectors stored in FAISS.
+valid_resumes = [res for res in resumes if res.get("text")]
+texts = [res["text"] for res in valid_resumes]
+
+if not texts:
+    raise ValueError("resume_metadata.json does not contain any resumes with text.")
 
 # Load model
 model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -19,13 +23,13 @@ embeddings = model.encode(texts, show_progress_bar=True)
 # Create FAISS index
 dimension = embeddings[0].shape[0]
 index = faiss.IndexFlatL2(dimension)
-index.add(np.array(embeddings))
+index.add(np.asarray(embeddings, dtype="float32"))
 
 # Save index
 faiss.write_index(index, "resume_index.faiss")
 
 # Save metadata separately if not already
 with open("resume_metadata.json", "w") as f:
-    json.dump(resumes, f)
+    json.dump(valid_resumes, f, indent=2)
 
 print("✅ resume_index.faiss successfully created!")
