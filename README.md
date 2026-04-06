@@ -1,12 +1,13 @@
 # Course Matcher
 
-A resume-driven recommendation app that matches uploaded resumes to similar profiles and relevant online courses using sentence embeddings and FAISS search.
+An AI-powered course recommendation system that matches user resumes to similar profiles and relevant online courses using semantic search, vector retrieval, and diversified reranking.
 
 ## Features
 - Resume upload with PDF and TXT support
 - Similar-profile search from a FAISS resume index
 - Diverse course recommendations with MMR reranking
 - Custom frontend built with Flask, HTML, CSS, and vanilla JavaScript
+- Extensible foundation for richer AI explanations and recommendation scoring
 
 ## Tech Stack
 - Python
@@ -15,6 +16,7 @@ A resume-driven recommendation app that matches uploaded resumes to similar prof
 - FAISS
 - NumPy
 - PyMuPDF
+- scikit-learn
 
 ## Run The Web App
 1. Create a virtual environment if you want a clean setup
@@ -30,3 +32,6 @@ A resume-driven recommendation app that matches uploaded resumes to similar prof
 - `static/styles.css`: custom visual design
 - `static/app.js`: upload and results UI
 - `final2.py`: preserved Streamlit-era recommendation prototype
+- `resume/`: resume index preparation utilities
+- `scraper.py`: course data scraping utility
+- `docs/project_report.pdf`: generated project report
