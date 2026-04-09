@@ -26,11 +26,17 @@ An AI-powered course recommendation system that matches user resumes to similar 
 5. Start the app with `python webapp.py`
 6. Open `http://127.0.0.1:5000`
 
+## Deploy On Vercel
+- `app.py` is the Vercel Flask entrypoint and imports the Flask `app` from `webapp.py`
+- Static assets are served from `public/` for Vercel compatibility
+- The FAISS indexes and course metadata pickle are intentionally tracked because the deployed app needs them at runtime
+
 ## Main Files
 - `webapp.py`: Flask backend and recommendation API
+- `app.py`: Vercel-compatible Flask entrypoint
 - `templates/index.html`: frontend layout
-- `static/styles.css`: custom visual design
-- `static/app.js`: upload and results UI
+- `public/styles.css`: custom visual design served by Vercel
+- `public/app.js`: upload and results UI served by Vercel
 - `final2.py`: preserved Streamlit-era recommendation prototype
 - `resume/`: resume index preparation utilities
 - `scraper.py`: course data scraping utility

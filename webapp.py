@@ -5,7 +5,7 @@ from functools import lru_cache
 import faiss
 import fitz
 import numpy as np
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, send_from_directory
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -175,6 +175,16 @@ def build_response(resume_text):
 @app.get("/")
 def index():
     return render_template("index.html")
+
+
+@app.get("/styles.css")
+def styles():
+    return send_from_directory("public", "styles.css")
+
+
+@app.get("/app.js")
+def frontend_script():
+    return send_from_directory("public", "app.js")
 
 
 @app.get("/api/health")

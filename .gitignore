@@ -12,6 +12,9 @@ __pycache__/
 # Large ML artifacts
 *.faiss
 *.pkl
+!courses_index.faiss
+!courses_metadata.pkl
+!resume_index.faiss
 
 # Data (keep only small CSVs if needed)
 data/archive-7/
