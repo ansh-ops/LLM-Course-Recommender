@@ -6,6 +6,7 @@ const statusPill = document.getElementById("status-pill");
 const skillsContainer = document.getElementById("skills");
 const profilesContainer = document.getElementById("profiles");
 const coursesContainer = document.getElementById("courses");
+const API_BASE_URL = resolveApiBaseUrl();
 
 input.addEventListener("change", () => {
   const file = input.files[0];
@@ -29,7 +30,7 @@ form.addEventListener("submit", async (event) => {
   renderLoadingState();
 
   try {
-    const response = await fetch("/api/recommend", {
+    const response = await fetch(`${API_BASE_URL}/api/recommend`, {
       method: "POST",
       body: payload,
     });
@@ -50,6 +51,15 @@ form.addEventListener("submit", async (event) => {
     submitButton.disabled = false;
   }
 });
+
+function resolveApiBaseUrl() {
+  const configuredBase = window.APP_CONFIG?.apiBaseUrl?.trim();
+  if (configuredBase) {
+    return configuredBase.replace(/\/$/, "");
+  }
+
+  return window.location.origin;
+}
 
 function setStatus(message, isError) {
   statusPill.textContent = message;

@@ -26,17 +26,29 @@ An AI-powered course recommendation system that matches user resumes to similar 
 5. Start the app with `python webapp.py`
 6. Open `http://127.0.0.1:5000`
 
-## Deploy On Vercel
-- `app.py` is the Vercel Flask entrypoint and imports the Flask `app` from `webapp.py`
-- Static assets are served from `public/` for Vercel compatibility
-- The FAISS indexes and course metadata pickle are intentionally tracked because the deployed app needs them at runtime
+## Split Deployment
+
+### Frontend on Vercel
+- Vercel now deploys the static frontend only
+- `vercel.json` builds `dist/` from `public/`
+- Set the Vercel environment variable `COURSE_MATCHER_API_BASE_URL` to your backend API URL, for example `https://your-render-service.onrender.com`
+
+### Backend API on Render
+- Render runs the Flask API using `render.yaml`
+- The backend still uses `app.py` and `webapp.py`
+- Set the Render environment variable `FRONTEND_ORIGIN` to your Vercel domain, for example `https://llm-course-recommender.vercel.app`
+- Keep `courses_index.faiss`, `courses_metadata.pkl`, `resume_index.faiss`, and `resume_metadata.json` in the repo because the backend needs them at runtime
 
 ## Main Files
 - `webapp.py`: Flask backend and recommendation API
-- `app.py`: Vercel-compatible Flask entrypoint
-- `templates/index.html`: frontend layout
-- `public/styles.css`: custom visual design served by Vercel
-- `public/app.js`: upload and results UI served by Vercel
+- `app.py`: Flask app entrypoint for API deployment
+- `public/index.html`: static frontend page
+- `public/styles.css`: custom visual design
+- `public/app.js`: upload and results UI
+- `public/config.js`: runtime frontend API configuration fallback
+- `scripts/build_frontend.py`: writes the Vercel-ready static build
+- `vercel.json`: Vercel static deployment config
+- `render.yaml`: Render backend deployment config
 - `final2.py`: preserved Streamlit-era recommendation prototype
 - `resume/`: resume index preparation utilities
 - `scraper.py`: course data scraping utility
