@@ -3,13 +3,9 @@ import os
 import pickle
 from functools import lru_cache
 
-import faiss
-import fitz
 import numpy as np
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
 
 
 app = Flask(__name__)
@@ -36,11 +32,15 @@ KNOWN_SKILLS = [
 
 @lru_cache(maxsize=1)
 def load_model():
+    from sentence_transformers import SentenceTransformer
+
     return SentenceTransformer("all-MiniLM-L6-v2")
 
 
 @lru_cache(maxsize=1)
 def load_resume_data():
+    import faiss
+
     index = faiss.read_index("resume_index.faiss")
     with open("resume_metadata.json", "r", encoding="utf-8") as file:
         resumes = json.load(file)
@@ -49,6 +49,8 @@ def load_resume_data():
 
 @lru_cache(maxsize=1)
 def load_course_data():
+    import faiss
+
     index = faiss.read_index("courses_index.faiss")
     with open("courses_metadata.pkl", "rb") as file:
         courses = pickle.load(file)
@@ -56,6 +58,8 @@ def load_course_data():
 
 
 def extract_text_from_pdf(file_storage):
+    import fitz
+
     document = fitz.open(stream=file_storage.read(), filetype="pdf")
     return " ".join(page.get_text() for page in document)
 
@@ -84,6 +88,15 @@ def safe_faiss_search(index, query_embedding, top_k):
     return [int(idx) for idx in indices[0] if idx >= 0]
 
 
+def cosine_similarity_matrix(a, b):
+    a_norm = np.linalg.norm(a, axis=1, keepdims=True)
+    b_norm = np.linalg.norm(b, axis=1, keepdims=True)
+
+    a_safe = a / np.clip(a_norm, 1e-12, None)
+    b_safe = b / np.clip(b_norm, 1e-12, None)
+    return a_safe @ b_safe.T
+
+
 def mmr(query_embedding, candidate_embeddings, k=5, lambda_param=0.65):
     if len(candidate_embeddings) == 0:
         return []
@@ -91,10 +104,12 @@ def mmr(query_embedding, candidate_embeddings, k=5, lambda_param=0.65):
     selected = []
     candidates = list(range(len(candidate_embeddings)))
 
-    sim_to_query = cosine_similarity(
+    sim_to_query = cosine_similarity_matrix(
         candidate_embeddings, query_embedding.reshape(1, -1)
     ).flatten()
-    sim_between_candidates = cosine_similarity(candidate_embeddings)
+    sim_between_candidates = cosine_similarity_matrix(
+        candidate_embeddings, candidate_embeddings
+    )
 
     for _ in range(min(k, len(candidate_embeddings))):
         if not selected:
