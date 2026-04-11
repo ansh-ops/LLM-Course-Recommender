@@ -38,6 +38,7 @@ An AI-powered course recommendation system that matches user resumes to similar 
 - The backend still uses `app.py` and `webapp.py`
 - Set the Render environment variable `FRONTEND_ORIGIN` to your Vercel domain, for example `https://llm-course-recommender.vercel.app`
 - Keep `courses_index.faiss`, `courses_metadata.pkl`, `resume_index.faiss`, and `resume_metadata.json` in the repo because the backend needs them at runtime
+- The Render start command must bind to Render's port: `gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120 --workers 1`
 
 ## Main Files
 - `webapp.py`: Flask backend and recommendation API
